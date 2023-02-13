@@ -1,0 +1,1 @@
+{"localIp": "localhost", "portNumer": 10000, "remoteIp": "localhost", "remotePortNumer": 10000, "storePassword": "testpass", "storePortNumber": 6379, "dynamicVariables": 3, "totalVariables": 6, "isDefaultMigrationEnabled": true, "storeType": "Redis"}
