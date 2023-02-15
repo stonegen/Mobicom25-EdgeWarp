@@ -8,6 +8,6 @@ Edge Applications Over 5G" paper.
 2. **carmap_with_edgecat** folder contains the CarMap application code modified with EdgeCat.
 3. **emp_with_edgecat** folder contains the EMP application code modified with EdgeCat.
 4. **state_migration_simulation_framework** folder contains the code used to simulate applications having diverse state properties.
-
+5. **handover_prediction** folder contains the code related to handover prediction and base station prediction, and its data preparation.
 
 *****Detailed documentation will be available post-publication.*****
