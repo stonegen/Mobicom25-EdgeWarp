@@ -1,4 +1,4 @@
-# SIGCOMM23-EDGECAT
+## Source code for EdgeCatalyst project.
 
 This code repo contains all the source code used in evaluation of "A Cross-Layer Design For Enabling Stateful Mobile
 Edge Applications Over 5G" paper.
@@ -8,6 +8,6 @@ Edge Applications Over 5G" paper.
 2. **carmap_with_edgecat** folder contains the CarMap application code modified with EdgeCat.
 3. **emp_with_edgecat** folder contains the EMP application code modified with EdgeCat.
 4. **state_migration_simulation_framework** folder contains the code used to simulate applications having diverse state properties.
-5. **target_base_station_prediction** folder contains the code related to handover prediction and base station prediction, and its data preparation.
+5. **target_base_station_prediction** folder contains the code related to handover prediction and base station prediction, and pre-processing of the datasets used to evaluate the target BS prediction pipeline. The datasets includee radio traces collected in high-speed trains, driving tests, and other miscellaneous mobility scenarios.
 
 *****Detailed documentation will be available post-publication.*****
