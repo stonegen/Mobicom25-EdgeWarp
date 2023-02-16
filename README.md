@@ -1,4 +1,4 @@
-# SIGCOMM23-EDGECAT
+## Source code for EdgeCatalyst project.
 
 This code repo contains all the source code used in evaluation of "A Cross-Layer Design For Enabling Stateful Mobile
 Edge Applications Over 5G" paper.
