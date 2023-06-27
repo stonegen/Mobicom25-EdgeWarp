@@ -57,30 +57,6 @@ You will be required to edit some filepaths pertaining to the different categori
 python3 gen_dataset.py
 ```
 
-
-### To Generate for Prognos
-Edit path to folder containing mi2log files in `meas_extract.py`
-[TODO: EXPLAIN HOW TO EDIT PATH CORRECTLY]
-Run the file using:
-```bash
-python3 meas_extract.py
-```
-
-## Input Shape Needed by Prognos
-For a sequence of events to be analyzed by prognos, the data to be analyzed should be placed in a single `.csv` file. A single line should contain **comma separated LTE events**, and the last entry contains the **handover type**. 
-
-**Additional Note**: Prognos determines the maximum number of columns to read using the **first** entry. If Prognos fails to run on automatically generated files, you can fix this error by adding **empty columns (commas)** to the first row in the `csv` file.
-
-Example: 
-```txt
-A3,A2,A3,pcell_intra,,,,,,,,,,,,,,,,,,,
-A5,pcell_intra
-A3,A2,A2,A2,A1,pcell_intra
-A3,A2,A2,A2,A1,pcell_intra
-A5,pcell_intra
-A5,pcell_intra
-```
-
 ## Input Shape Needed by the Base Station Predictor
 For a single handover event, we generate separate `csv` files containing signal strength measurements for each base station. These files may be of variable lengths owing to the availability of each base station. 
 
