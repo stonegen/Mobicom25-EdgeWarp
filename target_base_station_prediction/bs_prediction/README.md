@@ -8,9 +8,6 @@ The notebook files in this section contain the implementation of Base Station Pr
 ### **window_size_discussion.ipynb**
 Contains the evaluation of changing the window size on the performance of the model in terms of accuracy, earliest time to prediction (time window between correct target base station prediction and handover event), and dataset usability.
 
-### **hsr_misc_datasets_eval.ipynb**
-Earliest time to prediction (time window between correct target base station prediction and handover event) analysis for our Base Station Predictor on the **High Speed Rail Dataset** and **Miscellaneous Scenarios' Dataset**.
-
 ### **model_design_train.ipynb**
 Contains dataset preprocessing, model design and model training.
 
