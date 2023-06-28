@@ -1,6 +1,6 @@
 # Data Preparation
 
-This section contains all the files used for the conversion of MobileInsight logs (.mi2log files) into the format used as input by Prognos, and our Base Station Predictor (BSP).
+This section contains all the files used for the conversion of MobileInsight logs (.mi2log files) into the format used as input by our Base Station Predictor (BSP).
 
 ## Structuring your data
 For ease of categorization, we assume an easily replicable arrangement of data:
@@ -32,7 +32,7 @@ pip3 install -r requirements.txt
 ## MobileInsight installation
 You can [download the package](http://www.mobileinsight.net/download.html) and find [installation instructions here](https://github.com/mobile-insight/mobileinsight-core). 
 
-## Execution Instructions for the Base Station Predictor and Prognos
+## Execution Instructions for the Base Station Predictor
 
 The first file to execute is `generate_xmls.py`. However, you are needed to enter the path to your dataset. Change the `INPUT_PATH` variable to the path of your `DatasetFolder`. Change the `OUTPUT_FOLDER` to an empty folder (or non-existent directory). Then execute the following command in your terminal:
 
@@ -41,7 +41,7 @@ python3 generate_xmls.py
 ```
 Please note that it is alright to encounter occasional errors for some log files. Logging information can be inconsistent depending on different configurations of the user's mobile device which was used to collect the logs.
 
-This script is used to extract RRC Packet information from `mi2log` files, which is relevant for Prognos. Open this file in a text editor, and edit the `INPUT_FOLDER` variable to the path of your `DatasetFolder`, and the `OUTPUT_FOLDER` variable to anything. Then run the following command in your terminal:
+This script is used to extract RRC Packet information from `mi2log` files, which is relevant for the pre-processing pipeline. Open this file in a text editor, and edit the `INPUT_FOLDER` variable to the path of your `DatasetFolder`, and the `OUTPUT_FOLDER` variable to anything. Then run the following command in your terminal:
 ```bash
 python3 meas_extract.py
 ```
