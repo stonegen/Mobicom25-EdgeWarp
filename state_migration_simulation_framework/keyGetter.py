@@ -32,7 +32,7 @@ lock = Lock()
 keyCounter = 0
 LOCAL_HOST = "localhost"
 LOCAL_PORT = 6379
-TARGET_HOST = "localhost"
+TARGET_HOST = "203.135.63.29"
 TARGET_PORT = 6379
 
 

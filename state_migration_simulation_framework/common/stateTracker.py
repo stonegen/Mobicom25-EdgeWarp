@@ -5,109 +5,113 @@ from _thread import *
 import threading
 import sys
 from threading import Lock
+from common.statesManager import HashTable,DoublyLinkedList,Node
+from configuration.configParameters import ConfigParameters
+from configuration.config import Config
 
-class History:
-    def __init__(self, updateTime, key):
-        self.updateTime = updateTime
-        self.syncTime = 0
-        self.key = key
-        self.updateCounter = 0
-        self.syncCounter = 0
-        self.creationTime = time.time()
-        self.keySize = 0
-        self.updateFrequency = 0
-
-    def Fequency(self):
-        frequency = 0
-
-        # Wait for at least three updates to calculate frequency
-        if self.updateCounter >= 3:
-            duration = time.time() - self.creationTime
-            frequency = self.updateCounter / duration
-            self.updateFrequency = frequency
-
-        return frequency
+"""
+    Explaination :
+    This class calculates the updation frequency for each key when attached to it 
+"""
 
    
-
 class StateTracker:
+   
     def __init__(self, lock):
+        self.hashTable = HashTable()
         self.stateDict = {}
         self.lock = lock
         self.updateRateUpperLimit = 10
-        self.bigKeyUpperLimit = 10*1024 # 100KB: This should be based on backend bandwidth but hard-coded for now.
+        
+        
+        configuration = Config("configuration/config.json")
+        configParameters = configuration.GetConfigParameters()
+        self.stateMethod = configParameters.stateMethod
 
+
+    """
+        Stores the History class for each key in the dictionary
+    """
     def AddKeys(self, key, size):
-        self.stateDict[key] = History(time.time(), key)
-        self.stateDict[key].keySize = size
+        
+        self.hashTable.add_node(key,size)
 
-    
+
+    """
+        Updates the update time if key exists else creates a new History class , adds the counter regardless
+    """
     def UpdateKey(self, key):
-        try:
-            if key in self.stateDict:
-                self.stateDict[key].updateTime = time.time()
-            else:
-                self.stateDict[key] = History(time.time(), key)
-
-            self.stateDict[key].updateCounter += 1
-        finally:
-            pass
-
-    def UpdateSyncTime(self, keys):
-        try:
-            for key in keys:
-                self.stateDict[key].syncTime = time.time()
-                self.stateDict[key].syncCounter += 1
-        finally:
-            pass
-
-    def GetOldestUpdate(self):
-        
-        tempTime = sys.float_info.max
-        tempKey = None
+        try :
+            self.hashTable.update_node(key , 1, stateMethod = self.stateMethod)
+        except KeyError as e:
+            print(f"{e} in UpdateKeys")
+    
+    
+    def GetOldestUpdate(self , n : int , m : int):
+        """
+        Explaination : \n
+            To find atleast n oldest UnSynced Keys and atmost m oldest UnSynced Keys : \n
+            - From the tail of Unsync List we basically extract the keys one by one  
+            - Our Unsync List based on the LFU or LRU mode will be sorted on the UnSync time
+            - Oldest Updated key will have the smalled real UnSync Time (time at which key was updated)
+            Returns : keys in list with single item oldest updated key 
+        """    
         keys = []
-        try:
-            for key, Val in self.stateDict.items():
-                # The key idea of below if condition is that if a key is small (it blocking migration will take less time) and 
-                # its update frequency is high, then leave its migration for final state sync state. It will save bandwidth and
-                # avoid the impact during background sync.
 
-                if Val.keySize > self.bigKeyUpperLimit:
-                    if tempTime > Val.updateTime and Val.syncTime < Val.updateTime:
-                        tempTime = Val.updateTime
-                        tempKey = key
-                else:
-                    if Val.Fequency() <= self.updateRateUpperLimit:
-                        if tempTime > Val.updateTime and Val.syncTime < Val.updateTime:
-                            tempTime = Val.updateTime
-                            tempKey = key
+        if (self.hashTable.unSyncList.length == 0 or self.hashTable.unSyncList.length < n):
+            return keys
 
-        finally:
-            pass
+        if(self.hashTable.unSyncList.length < m):
+            m = self.hashTable.unSyncList.length
 
-        if tempKey != None:
-            keys.append(tempKey)
-        
+        ptr = self.hashTable.unSyncList.tail
+        for _ in range(0,m):
+
+            if(ptr != None) :
+                keys.append(ptr.key)           
+                ptr = ptr.prev
+            else :
+                break            
         return keys
 
 
-    
     def GetOutOfSyncKeys(self):
-        # print(self.stateDict, flush=True)
+
+        """
+            Explaination :
+                Get all the keys that have been updated after their last sync time 
+                This function is mainly called in the event of Redis HandOver only.
+        """
         keys = []
+        ptr = self.hashTable.unSyncList.tail
+        ## For my personal Debugging
+        # print("UNSYNC LIST SIZE IS : ", self.hashTable.unSyncList.length)
+        while(ptr != None):
 
-        try:
-            for key, Val in self.stateDict.items():
-                if Val.updateTime > Val.syncTime:
-                    keys.append(key)
+            if(ptr != None) :
+                keys.append(ptr.key)           
+                ptr = ptr.prev
+            else :
+                break            
+        return keys 
 
-        finally:
-            pass
 
+    """
+        Explaination :
+            This function is mainly used in the case when we have updated the keys hence we will be shifting them in SyncList 
+    """
+
+    def moveMigratedKeys(self , keys , timeSync = None):
+
+        try :
+            for key in keys :
+                self.hashTable.update_node(key,2,timeSync , stateMethod = self.stateMethod)
+            return True
+        except KeyError as e:
+            print(f"{e} in moveMigrateKeys")
+            return False
         
-        return keys
 
-    
 
     def GetLatestUpdateTime(self):
 
@@ -129,13 +133,20 @@ class StateTracker:
     def PrintKeys(self):
         
         try:
-            for key, Val in self.stateDict.items():
-                # print("key = {0}, Update = {1}, Sync  time= {2}, sync counter = {3}.".format(key, Val.updateTime, Val.syncTime, Val.syncCounter))
-                print("key = {}, Size = {} bytes, Update counter = {}, Update frequency = {}, sync counter = {}.".format(key, Val.keySize, Val.updateCounter, int(Val.Fequency()), Val.syncCounter))
-
+            unSyncList = self.hashTable.unSyncList
+            temp = unSyncList.head
+            print("__________")
+            while (temp != None ):
+                print(f"key : {temp.key} , Update Counter : {temp.history.updateCounter}" )
+                temp = temp.next
+            print("__________\n\n")
         finally:
             pass
 
+    """
+        Explaination :
+            Checks the keys that whether they have been updated after their sync ?          
+    """
     def AllSyncDone(self):
         try:
             for key, val in self.stateDict.items():
