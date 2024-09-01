@@ -1,1 +1,24 @@
-{"localIp": "localhost", "portNumer": 10000, "remoteIp": "localhost", "remotePortNumer": 10000, "storePassword": "testpass", "storePortNumber": 6379, "dynamicVariables": 3, "totalVariables": 6, "isDefaultMigrationEnabled": true, "storeType": "Redis"}
+{
+    "localIp": "203.135.63.4",
+    "portNumer": 6376,
+    "mobilityPort": 10001,
+    "remoteIp": "203.135.63.29",
+    "remotePortNumer": 6384,
+    "storePassword": "testpass",
+    "storePortNumber": 6378,
+    "dynamicVariables": 2,
+    "totalVariables": 11,
+    "keySize": 10240,
+    "isDefaultMigrationEnabled": 0,
+    "asyncType": 1,
+    "storeType": "Redis",
+    "hintTime": 10,
+    "handoverTime": 10.05,
+    "numberOfClients": 1,
+    "clientUpdateRate": 1,
+    "minOldestUpdates": 1,
+    "maxOldestUpdates": 1,
+    "stateMethod": "LFU",
+    "appName": "CarMAP_APP",
+    "WorstCase": 0
+}

@@ -32,7 +32,7 @@
 # keyCounter = 0
 # LOCAL_HOST = "localhost"
 # LOCAL_PORT = 6379
-# TARGET_HOST = "localhost"
+# TARGET_HOST = "203.135.63.29"
 # TARGET_PORT = 6379
 
 
@@ -144,7 +144,7 @@
 # #     print(len(r.get(key)))
 # # startTime = time.time()
 
-# # a = r.migrate('localhost', 6379, key, 0, 5000, auth="testpass", replace=True)
+# # a = r.migrate('203.135.63.29', 6379, key, 0, 5000, auth="testpass", replace=True)
 # # endTime = time.time()
 # # timeElapsed = endTime - startTime
 # # print("String length = {0} bytes, Time for migration = {1} \

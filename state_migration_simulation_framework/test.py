@@ -2,7 +2,7 @@ from pymemcache.client import base
 import time
 
 # ip = 'localhost'
-ip = 'localhost'
+ip = '203.135.63.29'
 
 # Don't forget to run `memcached' before running this next line:
 client = base.Client((ip, 11211))

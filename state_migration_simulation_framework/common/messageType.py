@@ -1,6 +1,6 @@
 import enum
 class MessageType(enum.Enum):
-    Default = 1
+    Default = 1 ## Dummy messages with no use 
     Client = 2
     MobilityHint = 3
     MobilityHandover = 4
