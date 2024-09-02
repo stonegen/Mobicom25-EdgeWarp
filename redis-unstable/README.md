@@ -1,5 +1,68 @@
 This README is just a fast *quick start* document. You can find more detailed documentation at [redis.io](https://redis.io).
 
+OverView of Our Contribution to the Redis Source Code :
+----------
+
+
+### Objective :
+Our main goal was to create a migration Scheme that would allow for Asynchronous Migration between two Redis DataStores. In the official version of the Redis Source Code, the **MIGRATE** API is a blocking command. Redis being single threaded in the core, does executes command one by one. Hence, every command is blocking to large extend. However commands like **MIGRATE** blocks the whole eventloop of the Source Redis Instance till all of the keys specified are migrated. This expotentially increases the blocking time period as now main thread will be blocked with the entire duration of the **DUMP**ing keys , sending the keys over the network, and waiting for all of the replies from the Destination Redis server (unless ofcourse the timeout occurs).
+
+Hence for the **EdgeCAT**'s two step synchronisation step, we had two main objectives in our mind : 
+1. we require that once a mobility hint is recieved , we should be migrating the keys asynchronously such that minimum possible time is spend on blocking. 
+2. Once the handOver is occured we still cannot use **MIGRATE** API. Due to it's blocking nature, the other client's requests happening simultaneously will be blocked leading to increase response time in their requests. 
+
+
+### Our Work & Code :
+Keeping the two objective in mind, we modified largely **src/cluster.c** for changing the functionality of the Migrate and Restore APIs. Secondly, the two additional files **t_pool.c** and **s_pool.c** were created. 
+- **t_pool.c** provides with a threadpool with n number of the threads which the Migrate Command will be using to DUMP n number of keys. Hence the workload will be divided into m number of threads.
+- **s_pool.c** provides just a single thread pool. This is slightly faster than **t_pool.c** as now we are now dealing with just the single thread. This is used when shifting the task from the main thread in order to send and listen for migration of n keys from source to destination server.  
+
+Both of these types of the threadpools are initialised in the **server.c**
+
+### Commands to use new Asynchronous Migration Schemes :
+
+**Note** :
+- All of the code is created so that we can have multi-threaded migration to reduce blockage time. To avoid usage of any locks with the redis main event loop , the new implementation has few additional requirments from the client (read below)
+- Asynchrounous migration schemes expects that you open a listener to which migration results will be shared out. Hence, you need to provide listener IP and listener port to the arguments. 
+- Asynchronous migration schemes will not be deleting the keys specified on the redis source instance.
+- Few trivial error handling is still to be done that will be completed in future updates 
+
+To use **default Synchronous Migration** : 
+
+    MIGRATE SYNC <normal arguments as provided by the original documentation>
+
+To use **modified Asynchronous-X version** (note that asynchronous X version only works for the String data types in the redis) :
+
+    MIGRATE ASYNC-X DESTINATION-IP DESTINATION-PORT LISTENER-IP LISTENER-PORT <rest of the normal arguments> 
+
+To use **modified Asynchronous-General version** (note that asynchronous General version works for all of the Redis Data Structures) :
+
+    MIGRATE ASYNC-X DESTINATION-IP DESTINATION-PORT LISTENER-IP LISTENER-PORT <rest of the normal arguments> 
+
+
+For example : (you can see how we have used asynchronous migration in python in **common/redisStore.py**)
+
+    MIGRATE ASYNC-X {targetHost} {targetPort} {recieverHost} {recieverPort} "" 0 5000 REPLACE KEYS Key1 Key2 Key3 
+    
+    Or
+
+    MIGRATE ASYNC {targetHost} {targetPort} {recieverHost} {recieverPort} "" 0 5000 REPLACE KEYS Key1 Key2 Key3
+
+
+### Detailed Over-View of the Implementation :
+Since, the flow diagram is difficult to explain in words, we have created slides that will improve the understanding of the implementation :)
+
+![Diagram of the Project](slides_for_async_migration/default_redis.png)
+
+![Diagram of the Project](slides_for_async_migration/async_general.png)
+
+![Diagram of the Project](slides_for_async_migration/async_X.png)
+
+![Diagram of the Project](slides_for_async_migration/comparison.png)
+
+
+
+
 What is Redis?
 --------------
 
