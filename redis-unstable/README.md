@@ -13,11 +13,11 @@ Hence for the **EdgeCAT**'s two step synchronisation step, we had two main objec
 
 
 ### Our Work & Code :
-Keeping the two objective in mind, we modified largely **src/cluster.c** for changing the functionality of the Migrate and Restore APIs. Secondly, the two additional files **t_pool.c** and **s_pool.c** were created. 
-- **t_pool.c** provides with a threadpool with n number of the threads which the Migrate Command will be using to DUMP n number of keys. Hence the workload will be divided into m number of threads.
-- **s_pool.c** provides just a single thread pool. This is slightly faster than **t_pool.c** as now we are now dealing with just the single thread. This is used when shifting the task from the main thread in order to send and listen for migration of n keys from source to destination server.  
+Keeping the two objective in mind, we modified largely [**src/cluster.c**](src/cluster.c) for changing the functionality of the Migrate and Restore APIs. Secondly, the two additional files [**tpool.c**](src/tpool.c) and [**spool.c**](src/spool.c) were created. 
+- **tpool.c** provides with a threadpool with n number of the threads which the Migrate Command will be using to DUMP n number of keys. Hence the workload will be divided into m number of threads.
+- **spool.c** provides just a single thread pool. This is slightly faster than **tpool.c** as now we are now dealing with just the single thread. This is used when shifting the task from the main thread in order to send and listen for migration of n keys from source to destination server.  
 
-Both of these types of the threadpools are initialised in the **server.c**
+Both of these types of the threadpools are initialised in the [**server.c**](src/server.c)
 
 ### Commands to use new Asynchronous Migration Schemes :
 
@@ -40,7 +40,7 @@ To use **modified Asynchronous-General version** (note that asynchronous General
     MIGRATE ASYNC-X DESTINATION-IP DESTINATION-PORT LISTENER-IP LISTENER-PORT <rest of the normal arguments> 
 
 
-For example : (you can see how we have used asynchronous migration in python in **common/redisStore.py**)
+For example : (you can see how we have used asynchronous migration in python in [**common/redisStore.py**](../state_migration_simulation_framework/common/redisStore.py))
 
     MIGRATE ASYNC-X {targetHost} {targetPort} {recieverHost} {recieverPort} "" 0 5000 REPLACE KEYS Key1 Key2 Key3 
     
