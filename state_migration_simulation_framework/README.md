@@ -2,11 +2,11 @@
 
 ### Basic flow of the simulation :
 
-The Simulation framework operates by running the **appserver.py** which will create a server instance listening on the provided IP and Port number from the clients for the normal messages and **mobility.py** for the **mobility hint & handover** related messages. 
+The Simulation framework operates by running the [**appserver.py**](appserver.py) which will create a server instance listening on the provided IP and Port number from the clients for the normal messages and [**mobilityHandler.py**](mobility_handler/mobilityHandler.py) for the **mobility hint & handover** related messages. 
 
 Secondly, when launching the appserver.py an instance of **mobilityHandler.py** will be created which is in gist, just a listener for the messages for the mobility related messages i.e. **mobility hint & handover**. These messages will be triggered by the client which the mobility handler will listen and push these messages over to the queue that **server instance** from appserver.py will be process appropriately.
 
-Lastly, the **appclient.py** initiates a client version that basically just messages over to the server and mobility handler based on the configuration provided. 
+Lastly, the [**appclient.py**](appclient.py) initiates a client version that basically just messages over to the server and mobility handler based on the configuration provided. 
 
 Every instance is directly or indirectly related to the **configuration** provided to the framework. *(Explained in detail in the next section)*
 
@@ -16,8 +16,8 @@ Every instance is directly or indirectly related to the **configuration** provid
 **Path** : state_migration_simulation_framework/configuration
 
 **OverView** :
-The core of the simulation resides in the **config.json** which has multiple properties that defines how each component of the simulation has to operate.
-The files such as **configParameters.py** & **config.py** are mainly responsible for the parsing the config.json and initiate a configuration class instance that could be used in the rest of the python files for to extract the parameters. Additionally, this also allows to change config.json (used mainly in the **startEvaluation.py**).
+The core of the simulation resides in the [**config.json**](configuration/config.json) which has multiple properties that defines how each component of the simulation has to operate.
+The files such as [**configParameters.py**](configuration/configParameters.py) & [**config.py**](configuration/config.py) are mainly responsible for the parsing the config.json and initiate a configuration class instance that could be used in the rest of the python files for to extract the parameters. Additionally, this also allows to change config.json (used mainly in the [**startEvaluation.py**](startEvaluation.py)).
 
 **Config.json** :
 Below is the explaination for each of the parameter involved in the configuration :
@@ -80,9 +80,9 @@ Normal DAG message flow from between server and client :
 - Hint and HandOver messages : Client &rarr; Mobility Handler &rarr; Server &rarr; BackGroundThreads for the Asynchronous Migration (if default Migration is 0)
 
 
-Once the hint is recieved to the server, given the default migration scheme = 0, the background thread will be initialised from the code **state_migration_simulation_framework/common/redisStore.py**. This will start an asynchronous server of it's own to interact with the Redis Source & Destination Server to send over the states asynchronously. 
+Once the hint is recieved to the server, given the default migration scheme = 0, the background thread will be initialised from the code [**redisStore.py**](common/redisStore.py). This will start an asynchronous server of it's own to interact with the Redis Source & Destination Server to send over the states asynchronously. 
 
-Once the handOver is recieved , the background thread involved in the asynchronous migration will be closed while simulatenously another thread for the handOver will be launched to start the handOver from **state_migration_simulation_framework/common/redisStore.py**. 
+Once the handOver is recieved , the background thread involved in the asynchronous migration will be closed while simulatenously another thread for the handOver will be launched to start the handOver from **redisStore.py**. 
 
 After the state is migrated completely, the socket connection with the client is closed gracefully the scripts are exited.
 
