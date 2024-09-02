@@ -249,13 +249,19 @@ mobilityProcess.start()
 clientsServed = 1
 
 # Keep listening to accpet new connections.
-## For the sake of simulation with one client we will limit ourselves with just 1 thread and 1 client
+## For the sake of simulation & execution of the long testing of startEvaluation.py with one client we will limit ourselves with just 1 thread and 1 client
+
+## Note: Code for the multiple client simulation is still on progress. This requires changing slightly the flow of appserver.py 
+## In future this will be completed
 
 while True:
 
     conn, addr = sock.accept()
-    # clientThread = Process(target=serve, args=(conn, addr, lock, mobilityQueue, mobilityHadlerExpectedDataLen, clientsServed))
-   
+
+    ## UNCOMMENT THIS LINE IF YOU WANT TO SIMULATE MULTIPLE CLIENTS 
+    # clientThread = Thread(target=serve, args=(conn, addr, lock, mobilityQueue, mobilityHadlerExpectedDataLen, clientsServed))
+    
+    ## COMMENT THIS LINE IF YOU WANT TO SIMULATE MULTIPLE CLIENTS
     serve(conn, addr, lock, mobilityQueue, mobilityHadlerExpectedDataLen, clientsServed)
     # clientThread.start()
     clientsServed += 1
