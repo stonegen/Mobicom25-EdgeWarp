@@ -96,12 +96,11 @@ class StateTracker:
         return keys 
 
 
-    """
-        Explaination :
-            This function is mainly used in the case when we have updated the keys hence we will be shifting them in SyncList 
-    """
-
     def moveMigratedKeys(self , keys , timeSync = None):
+        """
+            Explaination :
+            This function is mainly used in the case when we have updated the keys hence we will be shifting them in SyncList 
+        """
 
         try :
             for key in keys :
