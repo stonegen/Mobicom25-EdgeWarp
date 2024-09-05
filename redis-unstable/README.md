@@ -7,7 +7,7 @@ OverView of Our Contribution to the Redis Source Code :
 ### Objective :
 Our main goal was to create a migration Scheme that would allow for Asynchronous Migration between two Redis DataStores. In the official version of the Redis Source Code, the **MIGRATE** API is a blocking command. Redis being single threaded in the core, does executes command one by one. Hence, every command is blocking to large extend. However commands like **MIGRATE** blocks the whole eventloop of the Source Redis Instance till all of the keys specified are migrated. This expotentially increases the blocking time period as now main thread will be blocked with the entire duration of the **DUMP**ing keys , sending the keys over the network, and waiting for all of the replies from the Destination Redis server (unless ofcourse the timeout occurs).
 
-Hence for the **EdgeCAT**'s two step synchronisation step, we had two main objectives in our mind : 
+Hence for the **EdgeWarp**'s two step synchronisation step, we had two main objectives in our mind : 
 1. we require that once a mobility hint is recieved , we should be migrating the keys asynchronously such that minimum possible time is spend on blocking. 
 2. Once the handOver is occured we still cannot use **MIGRATE** API. Due to it's blocking nature, the other client's requests happening simultaneously will be blocked leading to increase response time in their requests. 
 
