@@ -1,6 +1,6 @@
 ## Source code for EdgeWarp project.
 
-This code repo contains all the source code used in the evaluation of the "Addressing Latency Challenges in Mobile Edge Applications: A Proactive Approach" paper.
+This code repo contains all the source code used in the evaluation of the "Warping the Edge: Where Instant Mobility in 5G/6G Meets Stateful Applications" paper.
 
 
 1. **app_aware_5g_control_plane** folder contains source code related to the application-aware cellular control plane.
