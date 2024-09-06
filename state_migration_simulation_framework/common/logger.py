@@ -16,7 +16,7 @@ class logger:
 
         ## Map of the Results Directory (Assuming No WorstCase set Up):
         ##  results 
-        ##      --- EdgeCat (default Edge Application's )
+        ##      --- EdgeWarp (default Edge Application's )
         ##      --- Car Map
         ##      --- EMP
 

@@ -172,7 +172,7 @@ def runDynamic_StatesDefault2(configuration : Config , defaultConfigParameters :
     totalVariables = 10
     hint = 10
     handover = 10.1
-    appName = "EdgeCAT_APP2"
+    appName = "EdgeWarp_APP2"
     keySize = (10*1024) ## Again this doesnt matter as keySaver.py will create Sizes by its own distribution
     UpdateRate = 50
 
@@ -213,7 +213,7 @@ def runDynamic_StatesDefault1(configuration : Config , defaultConfigParameters :
     totalVariables = 5
     hint = 10
     handover = 10.1
-    appName = "EdgeCAT_APP"
+    appName = "EdgeWarp_APP"
     keySize = (1000*1024)
     UpdateRate = 50
 

@@ -87,4 +87,9 @@ Once the handOver is recieved , the background thread involved in the asynchrono
 After the state is migrated completely, the socket connection with the client is closed gracefully the scripts are exited.
 
 
+### Simulations and Testing :
+
+All of the simulation related graphs conducted using the [**startEvaluation.py**](./startEvaluation.py) script. The script requires you to set which migration mode you need to use for the two step synchronisation and which apps to test. Please see the code, it is well documented to guide you with the process. Secondly, the scripts for the graphs & results & collected measurements for simulations can be found in **scripts_and_graphs**. The python notebook will guide you with the process of how to use the results for the creation of the graphs. As to how results are organised from the simulation please see the file : [**logger.py**](common/logger.py). 
+
+
 

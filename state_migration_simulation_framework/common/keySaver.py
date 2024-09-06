@@ -30,7 +30,7 @@ class KeySaver:
                 newKey = "user:" + str(clientNumber) + ":key" + str(i)
                 keys.append(newKey)
 
-        if(appName == "EdgeCAT_APP" or appName == None):
+        if(appName == "EdgeWarp_APP" or appName == None):
             self.defaultApp(keys, extStore, keySize)
         
         elif(appName == "CarMAP_APP" or appName == None):
@@ -39,7 +39,7 @@ class KeySaver:
         elif(appName == "EMP_APP" or appName == None):
             self.mobileVr(keys, extStore, keySize)
 
-        elif(appName == "EdgeCAT_APP2") :
+        elif(appName == "EdgeWarp_APP2") :
             self.edgeApp2(keys , extStore , keySize)
 
         elif(appName == "onlineGAME_APP" or appName == None):
